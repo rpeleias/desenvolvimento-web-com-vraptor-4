@@ -23,4 +23,17 @@ public class ProdutoController {
         ProdutoDao dao = new ProdutoDao(em);
         return dao.lista();
     }
+
+    @Path("/produto/formulario")
+    public void formulario(){
+    }
+    
+    @Path("/produto/adiciona")
+    public void adiciona(Produto produto) {
+        EntityManager em = JPAUtil.criaEntityManager();
+        em.getTransaction().begin();
+        ProdutoDao dao = new ProdutoDao(em);
+        dao.adiciona(produto);
+        em.getTransaction().commit();
+    }
 }
