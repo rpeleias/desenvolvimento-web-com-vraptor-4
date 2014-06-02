@@ -6,6 +6,7 @@ import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.annotation.Public;
 import br.com.caelum.vraptor.dao.UsuarioDao;
 import br.com.caelum.vraptor.model.Usuario;
 import br.com.caelum.vraptor.model.UsuarioLogado;
@@ -18,7 +19,7 @@ public class LoginController {
     private final UsuarioDao dao;
     private final Result result;
     private final Validator validator;
-	private UsuarioLogado usuarioLogado;
+	private final UsuarioLogado usuarioLogado;
 
     @Inject
     public LoginController(UsuarioDao dao, Result result, 
@@ -32,12 +33,12 @@ public class LoginController {
     protected LoginController() {
         this(null, null, null, null);
     }
-
-    @Get
+   
+    @Get @Public
     public void formulario() {
     }
 
-    @Post
+    @Post @Public
     public void autentica(Usuario usuario) {
         if(!dao.existe(usuario)){
             validator.add(new I18nMessage("login", "login.invalido"));
