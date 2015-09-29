@@ -13,13 +13,21 @@
 
 <div class="container">
 	<h1>Adicionar Produto</h1>
-	
+		
 	<form action="<c:url value='/produto/adiciona'/>" method="post">
         Nome: <input  class="form-control" type="text" name="produto.nome" value="${produto.nome}" />
         Valor: <input class="form-control" type="text" name="produto.valor" value="${produto.valor}" />
         Quantidade: <input class="form-control" type="text" name="produto.quantidade" value="${produto.quantidade}" />
         <button type="submit" class="btn btn-primary" >Adicionar</button>
     </form>
+    
+    <c:if test="${not empty errors}">
+    	<div class="alert alert-danger">
+    		<c:forEach items="${errors}" var="error">
+				${error.category} - ${error.message}<br/>
+			</c:forEach>
+    	</div>
+    </c:if>    
 </div>
 	
 
