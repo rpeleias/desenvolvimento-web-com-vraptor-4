@@ -1,51 +1,67 @@
 package br.com.caelum.vraptor.controller;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
+import javax.inject.Inject;
 
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
+import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.dao.ProdutoDao;
 import br.com.caelum.vraptor.model.Produto;
-import br.com.caelum.vraptor.util.JPAUtil;
+import br.com.caelum.vraptor.view.Results;
 
 @Controller
 public class ProdutoController {
+	
+	private Result result;
+	private ProdutoDao dao;
+	
+	@Deprecated
+	ProdutoController() {	
+	}
+
+	@Inject
+	public ProdutoController(Result result, ProdutoDao dao) {
+		this.result = result;
+		this.dao = dao;
+	}
 
 	@Path("/")
 	public void index() {
 	}
 
-	@Get("/produto/lista")
-	public List<Produto> lista() {
-		EntityManager em = JPAUtil.criaEntityManager();
-		ProdutoDao dao = new ProdutoDao(em);
-		return dao.lista();
+	@Get
+	public void lista() {		
+		result.include("produtoList", dao.lista());
+	}
+	
+	@Get
+	public void listaEmXml() {
+		result.use(Results.xml()).from(dao.lista()).serialize();
+	}
+	
+	@Get
+	public void listaEmJson() {
+		result.use(Results.json()).from(dao.lista()).serialize();
 	}
 	
 	@Path("/produto/formulario")
 	public void formulario() {		
 	}
 	
-	@Post("/produto/adiciona")
+	@Post
 	public void adiciona(Produto produto) {
-		EntityManager em = JPAUtil.criaEntityManager();
-		em.getTransaction().begin();
-		ProdutoDao dao = new ProdutoDao(em);
 		dao.adiciona(produto);
-		em.getTransaction().commit();
+		result.include("mensagem", "Produto adicionado com sucesso");
+		result.redirectTo(this).lista();
 	}
 	
-	@Delete("/produto/remove")
+	@Delete
 	public void remove(Produto produto) {
-		EntityManager em = JPAUtil.criaEntityManager();
-		em.getTransaction().begin();
-		ProdutoDao dao = new ProdutoDao(em);
 		dao.remove(produto);
-		em.getTransaction().commit();
+		result.include("mensagem", "Produto removido com sucesso");
+		result.redirectTo(this).lista();
 	}
 }

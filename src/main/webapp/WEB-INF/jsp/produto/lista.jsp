@@ -11,6 +11,10 @@
 </head>
 <body>
 	<div class="container">
+		<c:if test="${not empty mensagem}">
+			<div class="alert alert-success">${mensagem}</div>
+		</c:if>
+
 		<h1>Listagem de Produtos</h1>
 
 		<table class="table table-stripped table-hover table-bordered">
@@ -36,7 +40,8 @@
 			</tbody>
 		</table>
 
-		<a href="<c:url value='/produto/formulario'/>"> Adicionar mais produtos! </a>
+		<a href="<c:url value='/produto/formulario'/>"> Adicionar mais
+			produtos! </a>
 	</div>
 
 </body>
